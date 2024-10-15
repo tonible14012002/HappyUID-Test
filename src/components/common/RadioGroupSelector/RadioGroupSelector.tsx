@@ -33,7 +33,9 @@ export const RadioGroupSelector = (props: RadioGroupSelectorProps) => {
         }}
       >
         {options?.map((option) => (
-          <Radio value={option.value}>{option.label}</Radio>
+          <Radio key={option.value} value={option.value}>
+            {option.label}
+          </Radio>
         ))}
       </RadioGroup>
     </div>

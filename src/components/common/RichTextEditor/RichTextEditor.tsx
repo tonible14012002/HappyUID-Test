@@ -1,5 +1,5 @@
 import type { ImageData as QuillImageData } from 'quill-image-drop-and-paste'
-import { useCallback, useMemo, useRef, lazy } from 'react'
+import { useCallback, useMemo, useRef, lazy, Suspense } from 'react'
 import type ReactQuillNS from 'react-quill'
 // import { Quill } from 'react-quill'
 
@@ -105,13 +105,15 @@ const RichTextEditor = (props: RichTextEditorProps) => {
         'w-full h-full rich-text-editor rounded-large overflow-hidden bg-content2',
       )}
     >
-      <ReactQuill
-        formats={formats}
-        ref={quillRef}
-        modules={mergedModules}
-        value={value || ''}
-        {...restProps}
-      />
+      <Suspense>
+        <ReactQuill
+          formats={formats}
+          ref={quillRef}
+          modules={mergedModules}
+          value={value || ''}
+          {...restProps}
+        />
+      </Suspense>
     </div>
   )
 }

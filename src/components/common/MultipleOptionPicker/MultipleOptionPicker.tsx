@@ -27,6 +27,7 @@ export const MultipleOptionPicker = (props: MultipleOptionPickerProps) => {
       <ButtonGroup>
         {options?.map((option) => (
           <Button
+            key={option.value}
             color={value?.includes(option.value) ? 'primary' : 'default'}
             onClick={() => {
               if (onChange) {
