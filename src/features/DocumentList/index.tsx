@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import Spinner from '../../compoments/Spinner'
 import { useGetDocsListQuery } from '../../services/docs'
 
 import styles from './index.module.css'
@@ -24,7 +23,7 @@ const DocumentList: React.FC = () => {
       <header className={styles.header}>
         <h1>Document List</h1>
       </header>
-      {isLoading && <Spinner size="xl" />}
+      {isLoading && 'loading'}
       <section className={styles.documentList}>
         {data &&
           data.map((doc, i) => (

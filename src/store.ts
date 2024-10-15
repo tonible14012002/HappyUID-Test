@@ -10,6 +10,7 @@ import { docsApi } from './services/docs'
 // Setup redux-first-history
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({ history: createBrowserHistory() })
+
 export const store = configureStore({
   devTools: process.env.NODE_ENV === 'development',
   middleware: (getDefaultMiddleware) =>
