@@ -1,16 +1,17 @@
 import type { ImageData as QuillImageData } from 'quill-image-drop-and-paste'
 import { useCallback, useMemo, useRef, lazy, Suspense } from 'react'
-import type ReactQuillNS from 'react-quill'
-// import { Quill } from 'react-quill'
-
 import 'react-quill/dist/quill.snow.css'
+import type ReactQuillNS from 'react-quill'
+import { Quill } from 'react-quill'
 
+import { uploadImage } from '@/libs/uploader'
 import { cn, newIdGenerator } from '@/utils/common'
-// import { preloadImage } from '@/utils/image'
-// import { QUILL_FONT_SIZE } from 'constants/quill'
+import { preloadImage } from '@/utils/image'
+
+import Typography from '../Typography'
 
 import type { RichTextEditorProps } from './type'
-import { URL_REGEX } from './utils'
+import { calculatePlaceholderInsertLength, URL_REGEX } from './utils'
 
 const ReactQuill = lazy(async () => import('./quill'))
 
@@ -52,6 +53,8 @@ const RichTextEditor = (props: RichTextEditorProps) => {
     modules = DEFAULT_MODULES,
     value,
     className,
+    isError,
+    errorMessage,
     ...restProps
   } = props
 
@@ -101,9 +104,9 @@ const RichTextEditor = (props: RichTextEditorProps) => {
 
   return (
     <div
-      className={cn(
-        'w-full h-full rich-text-editor rounded-large overflow-hidden bg-content2',
-      )}
+      className={cn('w-full h-fit rich-text-editor rounded-large', {
+        '[&_.ql-container]:bg-danger-50 [&_.ql-toolbar]:bg-danger-50': isError,
+      })}
     >
       <Suspense>
         <ReactQuill
@@ -113,6 +116,11 @@ const RichTextEditor = (props: RichTextEditorProps) => {
           value={value || ''}
           {...restProps}
         />
+        {isError && (
+          <Typography level="p6" fontWeight="md" color="danger">
+            {errorMessage}
+          </Typography>
+        )}
       </Suspense>
     </div>
   )
@@ -130,8 +138,7 @@ const handleInsertPlaceHolderAndUploadImage = (
   const url = window.URL.createObjectURL(blob)
 
   const placeholderId = idGenerator()
-  //   const placeHolderDelta =
-  quill.insertEmbed(
+  const placeHolderDelta = quill.insertEmbed(
     insertPosition,
     // custom node
     'imagePlaceholderBlot',
@@ -139,29 +146,21 @@ const handleInsertPlaceHolderAndUploadImage = (
   )
 
   quill.setSelection(insertPosition + 1, 0, 'user')
+  uploadImage(new File([blob], 'image.png'))
+    .then(async (data) => {
+      const rangeToDelete = calculatePlaceholderInsertLength(placeHolderDelta)
+      await preloadImage(data?.secure_url || '')
+      const placeHolderImage = document.querySelector(
+        `[image-placeholder="${placeholderId}"]`,
+      )
+      // image removed
+      if (!placeHolderImage) return
 
-  //   uploadService
-  // .uploadFile(
-  //   {
-  //     filename: blob.name ?? 'upload-image',
-  //     contentType: blob.type,
-  //   },
-  //   blob,
-  // )
-  // .then(async (data) => {
-  //   const rangeToDelete = calculatePlaceholderInsertLength(placeHolderDelta)
-  //   await preloadImage(data.publicUrl)
-  //   const placeHolderImage = document.querySelector(
-  //     `[image-placeholder="${placeholderId}"]`,
-  //   )
-  //   // image removed
-  //   if (!placeHolderImage) return
-
-  //   const deleteIndex = quill.getIndex(Quill.find(placeHolderImage, true))
-  //   quill.deleteText(deleteIndex, rangeToDelete, 'user')
-  //   quill.insertEmbed(deleteIndex, 'image', data.publicUrl, 'user')
-  // })
-  // .catch((e) => {
-  //   toast.error(e.message || 'Failed to upload image')
-  // })
+      const deleteIndex = quill.getIndex(Quill.find(placeHolderImage, true))
+      quill.deleteText(deleteIndex, rangeToDelete, 'user')
+      quill.insertEmbed(deleteIndex, 'image', data?.secure_url, 'user')
+    })
+    .catch((e) => {
+      console.error(e)
+    })
 }

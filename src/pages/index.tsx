@@ -1,4 +1,5 @@
 import { AppLayout, Layout } from '@/components/layout/Layout'
+import { ProductList } from '@/components/product/ProductList'
 
 import { HomePage } from './Home'
 import { ProductAdd } from './ProductAdd'
@@ -20,7 +21,7 @@ const routes = [
   {
     path: ROUTES.PRODUCT_LIST,
     title: 'Products',
-    element: () => <div>add</div>,
+    element: ProductList,
     layout: AppLayout,
   },
 ]

@@ -4,8 +4,7 @@ import { createBrowserHistory } from 'history'
 import { combineReducers } from 'redux'
 import { createReduxHistoryContext } from 'redux-first-history'
 
-import counterReducer from './features/Counter/counterSlice'
-import { docsApi } from './services/docs'
+import productApi from '@/stores/product'
 
 // Setup redux-first-history
 const { createReduxHistory, routerMiddleware, routerReducer } =
@@ -14,11 +13,10 @@ const { createReduxHistory, routerMiddleware, routerReducer } =
 export const store = configureStore({
   devTools: process.env.NODE_ENV === 'development',
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([docsApi.middleware, routerMiddleware]),
+    getDefaultMiddleware().concat([routerMiddleware, productApi.middleware]),
   reducer: combineReducers({
-    counter: counterReducer,
     router: routerReducer,
-    [docsApi.reducerPath]: docsApi.reducer,
+    [productApi.reducerPath]: productApi,
   }),
 })
 

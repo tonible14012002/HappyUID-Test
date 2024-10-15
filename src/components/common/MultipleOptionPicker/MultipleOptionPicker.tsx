@@ -8,10 +8,22 @@ export interface MultipleOptionPickerProps {
   options?: { label: string; value: string }[]
   title?: string
   description?: string
+  disabled?: boolean
+  isError?: boolean
+  errorMessage?: string
 }
 
 export const MultipleOptionPicker = (props: MultipleOptionPickerProps) => {
-  const { value, onChange, options, title, description } = props
+  const {
+    value,
+    onChange,
+    options,
+    title,
+    description,
+    disabled,
+    isError,
+    errorMessage,
+  } = props
   return (
     <div className="space-y-3 w-full">
       <div className="space-y-1">
@@ -24,7 +36,7 @@ export const MultipleOptionPicker = (props: MultipleOptionPickerProps) => {
           </Typography>
         )}
       </div>
-      <ButtonGroup>
+      <ButtonGroup isDisabled={disabled}>
         {options?.map((option) => (
           <Button
             key={option.value}
@@ -43,6 +55,11 @@ export const MultipleOptionPicker = (props: MultipleOptionPickerProps) => {
           </Button>
         ))}
       </ButtonGroup>
+      {isError && (
+        <Typography level="p6" color="danger" className="mt-2" component="p">
+          {errorMessage}
+        </Typography>
+      )}
     </div>
   )
 }

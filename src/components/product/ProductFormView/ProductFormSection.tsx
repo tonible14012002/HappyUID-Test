@@ -16,7 +16,7 @@ export const ProductFormSection = (props: ProductFormSectionProps) => {
       <CardHeader>
         <Typography level="h6">{title}</Typography>
       </CardHeader>
-      <CardBody className="space-y-4">{children}</CardBody>
+      <CardBody className="space-y-6">{children}</CardBody>
     </Card>
   )
 }

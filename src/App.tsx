@@ -7,6 +7,7 @@ import { HistoryRouter } from 'redux-first-history/rr6'
 
 import { Layout } from '@/components/layout/Layout'
 
+import Toaster from './components/common/Toast'
 import routes from './pages'
 import { history, store } from './store'
 
@@ -35,6 +36,7 @@ const App: React.FC = () => {
           </HistoryRouter>
         </ReduxStoreProvider>
       </NextUIProvider>
+      <Toaster />
     </ThemeProvider>
   )
 }

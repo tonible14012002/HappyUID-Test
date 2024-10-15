@@ -4,6 +4,7 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
+  Chip,
 } from '@nextui-org/react'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -35,17 +36,19 @@ export const AppHeader = () => {
         <NavbarBrand as={Link} to={ROUTES.HOME}>
           <Logo />
         </NavbarBrand>
-        <NavbarContent className="sm:flex gap-8" justify="center">
+        <NavbarContent className="sm:flex gap-4" justify="center">
           {HEAD_ROUTES.map(({ title, to }) => (
-            <NavbarItem>
-              <NextUILink
-                as={Link}
-                color={to === pathname ? 'primary' : 'foreground'}
-                to={to}
-              >
-                {title}
-              </NextUILink>
-            </NavbarItem>
+            <Chip
+              variant="solid"
+              key={to}
+              color={to === pathname ? 'primary' : 'default'}
+            >
+              <NavbarItem className="!text-inherit">
+                <NextUILink as={Link} to={to} className="text-inherit">
+                  {title}
+                </NextUILink>
+              </NavbarItem>
+            </Chip>
           ))}
         </NavbarContent>
         <NavbarContent className="hidden sm:flex gap-4" justify="end">

@@ -1,6 +1,7 @@
 import type { ThemeColors } from '@nextui-org/react'
 import { nextui, colors } from '@nextui-org/react'
 import tailwindTypo from '@tailwindcss/typography'
+import tailwindAnimate from 'tailwindcss-animate'
 
 module.exports = {
   content: [
@@ -9,6 +10,7 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   plugins: [
+    tailwindAnimate,
     tailwindTypo,
     nextui({
       themes: {

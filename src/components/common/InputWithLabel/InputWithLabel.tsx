@@ -8,13 +8,13 @@ import Typography from '../Typography'
 export const InputWithLabel = (
   props: InputProps & { wrapperClassName?: string },
 ) => {
-  const { label, wrapperClassName, ...rest } = props
+  const { label, isRequired, wrapperClassName, ...rest } = props
   return (
     <label className={cn('space-y-3 block', wrapperClassName)}>
       <Typography level="p5" color="textSecondary">
-        {label}
+        {label} {isRequired ? '*' : ''}
       </Typography>
-      <Input {...rest} />
+      <Input {...rest} isRequired={isRequired} />
     </label>
   )
 }

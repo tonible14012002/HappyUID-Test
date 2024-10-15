@@ -12,4 +12,12 @@ export const FormMultipleOptionPicker = withForm<
       onChange,
     }
   },
+  getIsInvalid(isError) {
+    return {
+      isError,
+    }
+  },
+  getErrMsg(errorMessage) {
+    return { errorMessage }
+  },
 })

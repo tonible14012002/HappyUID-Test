@@ -8,10 +8,11 @@ export interface RadioGroupSelectorProps {
   options?: { label: string; value: string }[]
   title?: string
   description?: string
+  disabled?: boolean
 }
 
 export const RadioGroupSelector = (props: RadioGroupSelectorProps) => {
-  const { value, onValueChange, options, title, description } = props
+  const { value, onValueChange, options, title, description, disabled } = props
   return (
     <div className="space-y-3 w-full">
       <div className="space-y-1">
@@ -28,6 +29,7 @@ export const RadioGroupSelector = (props: RadioGroupSelectorProps) => {
         onValueChange={onValueChange}
         value={value}
         orientation="horizontal"
+        isDisabled={disabled}
         classNames={{
           wrapper: 'gap-6',
         }}
