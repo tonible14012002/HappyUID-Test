@@ -1,6 +1,6 @@
 import { Meta } from '@/components/common/Meta'
 import { Typography } from '@/components/common/Typography'
-import { ProductListTable } from '@/components/product/ProductListView/ProductListTable'
+import { ProductListTable } from '@/components/product/ProductListTable/ProductListTable'
 import { useGetProductsQuery } from '@/stores/product'
 
 export const ProductListPage = () => {
