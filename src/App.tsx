@@ -28,16 +28,16 @@ const App: React.FC = () => {
     )
   })
   return (
-    <ThemeProvider>
-      <NextUIProvider>
-        <ReduxStoreProvider store={store}>
+    <ReduxStoreProvider store={store}>
+      <ThemeProvider>
+        <NextUIProvider>
           <HistoryRouter history={history}>
             <Routes>{pageRoutes}</Routes>
           </HistoryRouter>
-        </ReduxStoreProvider>
-      </NextUIProvider>
-      <Toaster />
-    </ThemeProvider>
+        </NextUIProvider>
+        <Toaster />
+      </ThemeProvider>
+    </ReduxStoreProvider>
   )
 }
 

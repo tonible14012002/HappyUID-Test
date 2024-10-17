@@ -1,4 +1,7 @@
+import { useFormContext } from 'react-hook-form'
+
 import { FormInputWithLabel } from '@/components/common/Form/FormInputWithLabel'
+import { FormMediaPicker } from '@/components/common/Form/FormMediaPicker'
 import { FormMultipleOptionPicker } from '@/components/common/Form/FormMultipleOptionPicker'
 import { FormRadioGroupSelector } from '@/components/common/Form/FormRadioGroupSelector'
 import { FormRichTextEditor } from '@/components/common/Form/FormRichTextEditor'
@@ -7,24 +10,11 @@ import Typography from '@/components/common/Typography'
 
 import { CategoryAutoComplete } from './CategoryAutoComplete'
 import type { IItem, CategoryAutoCompleteProps } from './CategoryAutoComplete'
-import type { MediaMeta } from './constant'
+import type { ProductFormValues } from './constant'
 import { GenderEnum } from './constant'
 import { ProductFormSection } from './ProductFormSection'
-import type { ProductMediaPickerProps } from './ProductMediaPicker'
-import { ProductMediaPicker } from './ProductMediaPicker'
 
 export const ADD_PRODUCT_KEY = 'ADD_PRODUCT_KEY'
-
-const FormMediaPicker = withForm<
-  Record<string, MediaMeta>,
-  ProductMediaPickerProps
->(ProductMediaPicker, {
-  getOnValueChange(onChange) {
-    return {
-      onChange,
-    }
-  },
-})
 
 const FormCategoryAutoComplete = withForm<IItem[], CategoryAutoCompleteProps>(
   CategoryAutoComplete,
@@ -52,6 +42,8 @@ export const ProductFormView = ({
   loading,
   disabled,
 }: ProductFormViewProps) => {
+  const formInstance = useFormContext<ProductFormValues>()
+  const mediaErr = formInstance.formState.errors.media
   return (
     <div className="md:grid lg:grid-cols-[2fr_400px] flex flex-col gap-8 max-w-full">
       <div className="flex flex-col overflow-x-hidden gap-8">
@@ -122,10 +114,16 @@ export const ProductFormView = ({
       </div>
       <div className="flex flex-col gap-8">
         <ProductFormSection className="h-fit" title="Upload Image">
-          <FormMediaPicker name="media" />
+          <FormMediaPicker
+            name="media"
+            isError={!!mediaErr}
+            disabled={loading || disabled}
+            errorMessage="At least one image is required"
+          />
         </ProductFormSection>
         <ProductFormSection className="h-fit" title="Category">
           <FormCategoryAutoComplete
+            label="Product Category"
             name="categories"
             disabled={loading || disabled}
           />

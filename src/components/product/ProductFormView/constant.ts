@@ -8,7 +8,7 @@ export enum GenderEnum {
 
 export const schema = z.object({
   name: z.string().min(1, 'Name is required'),
-  description: z.string().min(200, 'Description is at least 200 characters'),
+  description: z.string().min(50, 'Description is at least 50 characters'),
   sizes: z.array(z.string()).min(1, 'Select available sizes'),
   gender: z.nativeEnum(GenderEnum, {
     required_error: 'Select one gender',
@@ -22,9 +22,15 @@ export const schema = z.object({
         id: z.string(),
       }),
     )
-    .refine((value) => {
-      return Object.values(value).length
-    }),
+    .refine(
+      (value) => {
+        return Object.values(value).length
+      },
+      {
+        path: ['media'],
+        message: 'At least one image is required',
+      },
+    ),
   categories: z
     .array(
       z.object({
@@ -41,6 +47,15 @@ export const schema = z.object({
       return !isNaN(Number(value))
     }),
 })
+
+export const defaultValues = {
+  name: '',
+  sizes: [],
+  gender: GenderEnum.Female,
+  description: '',
+  media: {},
+  price: '0',
+}
 
 export type ProductFormValues = z.infer<typeof schema>
 

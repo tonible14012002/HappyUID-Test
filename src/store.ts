@@ -13,10 +13,10 @@ const { createReduxHistory, routerMiddleware, routerReducer } =
 export const store = configureStore({
   devTools: process.env.NODE_ENV === 'development',
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([routerMiddleware, productApi.middleware]),
+    getDefaultMiddleware().concat(routerMiddleware, productApi.middleware),
   reducer: combineReducers({
+    [productApi.reducerPath]: productApi.reducer,
     router: routerReducer,
-    [productApi.reducerPath]: productApi,
   }),
 })
 

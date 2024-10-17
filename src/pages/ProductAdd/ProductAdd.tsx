@@ -3,13 +3,14 @@ import { Button } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { RiArrowLeftSLine, RiCheckLine, RiSave2Line } from 'react-icons/ri'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { DebouncedState } from 'use-debounce'
 
+import { Meta } from '@/components/common/Meta'
 import Typography from '@/components/common/Typography'
 import { ProductFormView } from '@/components/product/ProductFormView'
 import {
-  GenderEnum,
+  defaultValues,
   schema,
   type ProductFormValues,
 } from '@/components/product/ProductFormView/constant'
@@ -25,6 +26,7 @@ export const ADD_PRODUCT_KEY = 'ADD_PRODUCT_KEY'
 
 export const ProductAdd = () => {
   const [createProduct] = useCreateProductMutation()
+  const navigate = useNavigate()
 
   const { toast } = useToast()
   const { persistDataLocalStore, loadInitData } =
@@ -42,19 +44,14 @@ export const ProductAdd = () => {
 
   const formInstance = useForm<ProductFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: loadInitData({
-      name: '',
-      sizes: [],
-      gender: GenderEnum.Female,
-      description: '',
-      media: {},
-      price: '0',
-    }),
+    defaultValues: loadInitData(defaultValues),
   })
+  console.log(formInstance.formState.errors)
 
   const handleSave = formInstance.handleSubmit(async (values) => {
+    console.log(values.categories)
     try {
-      const product = await createProduct({
+      await createProduct({
         name: values.name,
         description: values.description,
         id: generateUUID(),
@@ -64,29 +61,11 @@ export const ProductAdd = () => {
         price: Number(values.price),
         sizes: values.sizes,
       })
-      console.log(product)
+      navigate(ROUTES.PRODUCT_LIST)
       toast({
         variant: 'success',
         title: 'Product added',
       })
-      formInstance.reset(
-        {
-          name: '',
-          sizes: [],
-          gender: GenderEnum.Female,
-          categories: [],
-          description: '',
-          media: {},
-          price: '0',
-        },
-        {
-          keepDirty: false,
-          keepErrors: false,
-          keepDirtyValues: false,
-          keepTouched: false,
-          keepIsValid: false,
-        },
-      )
     } catch (e) {
       toast({
         variant: 'danger',
@@ -95,8 +74,11 @@ export const ProductAdd = () => {
     }
   })
 
+  console.log(formInstance.formState.errors)
+
   return (
     <FormProvider {...formInstance}>
+      <Meta title="Add product" />
       <ProductAutoSaveDraft debounceSaveDraft={persistDataLocalStore} />
       <form
         className="flex flex-col gap-8 mt-4 mb-[100px]"

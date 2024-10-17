@@ -7,12 +7,15 @@ import { sleep } from '@/utils/sleep'
 export const productApi = createApi({
   reducerPath: 'productApi',
   baseQuery: fakeBaseQuery(),
+  refetchOnMountOrArgChange: true,
+  refetchOnReconnect: true,
+  refetchOnFocus: true,
   endpoints: (builder) => ({
     getProducts: builder.query<Product[], void>({
       queryFn: async () => {
+        await sleep(1000)
         try {
           const products = Storage.getValue<Product[]>('products', [])
-          console.log({ products })
           return { data: products }
         } catch (error) {
           return {
@@ -66,15 +69,36 @@ export const productApi = createApi({
         }
       },
     }),
-    removeProduct: builder.mutation<Product, string>({
-      queryFn: async (id: string) => {
+    removeProduct: builder.mutation<Product[], string[]>({
+      queryFn: async (ids: string[]) => {
         await sleep(1000)
         try {
           const products = Storage.getValue<Product[]>('products', []) ?? []
-          const updatedProducts = products.filter((p) => p.id !== id)
+          const updatedProducts = products.filter((p) => !ids.includes(p.id))
           Storage.setValue('products', updatedProducts)
           return {
-            data: products.find((p) => p.id === id),
+            data: products.filter((p) => ids.includes(p.id)),
+          }
+        } catch (error) {
+          return {
+            error: { status: 500, data: { message: 'Internal Server Error' } },
+          }
+        }
+      },
+    }),
+    getProductDetail: builder.query<Product, string>({
+      queryFn: async (id: string) => {
+        sleep(1000)
+        try {
+          const products = Storage.getValue<Product[]>('products', []) ?? []
+          const product = products.find((p) => p.id === id)
+          if (!product) {
+            return {
+              error: { status: 404, data: { message: 'Product not found' } },
+            }
+          }
+          return {
+            data: product,
           }
         } catch (error) {
           return {
@@ -91,6 +115,7 @@ export const {
   useCreateProductMutation,
   useRemoveProductMutation,
   useUpdateProductMutation,
+  useGetProductDetailQuery,
 } = productApi
 
 export default productApi

@@ -12,6 +12,7 @@ import { RiCloseLine } from 'react-icons/ri'
 
 import { PopperCard } from '@/components/common/PopperCard'
 import Typography from '@/components/common/Typography'
+import { cn } from '@/utils/common'
 
 export type IItem = {
   label: string
@@ -21,9 +22,17 @@ export type IItem = {
 export interface CategoryAutoCompleteProps
   extends Omit<InputProps, 'value' | 'onChange' | 'isInvalid' | 'errMsg'> {
   value?: IItem[]
+  maxShow?: number
   onChange?: (value: IItem[]) => void
   isError?: boolean
   errorMessage?: string
+  classNames?: {
+    input?: string
+    chip?: string
+    wrapper?: string
+    chipsWrapper?: string
+  }
+  label?: string
 }
 
 export const BASE_CATEGORY = [
@@ -47,7 +56,14 @@ export const BASE_CATEGORY = [
 
 export const CategoryAutoComplete = (props: CategoryAutoCompleteProps) => {
   const [search, setSearch] = useState('')
-  const { value: externalVal, onChange } = props
+  const {
+    value: externalVal,
+    onChange,
+    classNames,
+    label,
+    maxShow,
+    ...inputProps
+  } = props
   const { onOpen, isOpen, onClose } = useDisclosure()
 
   const value = externalVal || []
@@ -58,11 +74,17 @@ export const CategoryAutoComplete = (props: CategoryAutoCompleteProps) => {
       !value.some((v) => v.value === category.value),
   )
 
+  const toShow =
+    maxShow && value.length > maxShow ? value.slice(0, maxShow) : value
+  const remain = maxShow ? Math.max(value.length - maxShow, 0) : 0
+
   return (
-    <div className="space-y-3">
-      <Typography level="p5" color="textSecondary">
-        Product Category
-      </Typography>
+    <div className={cn('space-y-3', classNames?.wrapper)}>
+      {label && (
+        <Typography level="p5" color="textSecondary">
+          {label}
+        </Typography>
+      )}
       <PopperCard
         placement="bottom-start"
         isOpen={isOpen}
@@ -100,6 +122,7 @@ export const CategoryAutoComplete = (props: CategoryAutoCompleteProps) => {
         )}
       >
         <Input
+          className={cn(classNames?.input)}
           errorMessage={props.isError ? props.errorMessage : ''}
           isInvalid={props.isError}
           size="lg"
@@ -122,11 +145,13 @@ export const CategoryAutoComplete = (props: CategoryAutoCompleteProps) => {
           onFocus={() => {
             onOpen()
           }}
+          {...inputProps}
         />
       </PopperCard>
-      <div className="flex flex-wrap gap-2">
-        {value.map((category) => (
+      <div className={cn('flex flex-wrap gap-2', classNames?.chipsWrapper)}>
+        {toShow.map((category) => (
           <Chip
+            className={cn(classNames?.chip)}
             endContent={
               <Button
                 isIconOnly
@@ -149,6 +174,11 @@ export const CategoryAutoComplete = (props: CategoryAutoCompleteProps) => {
             {category.label}
           </Chip>
         ))}
+        {remain > 0 && (
+          <Chip className={cn(classNames?.chip)} color="primary" variant="flat">
+            +{remain}
+          </Chip>
+        )}
       </div>
     </div>
   )

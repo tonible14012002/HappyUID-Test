@@ -1,5 +1,5 @@
 import { Button, Card, CardBody, Image } from '@nextui-org/react'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { RiAddLine, RiCloseLine } from 'react-icons/ri'
 import type Slider from 'react-slick'
@@ -15,6 +15,8 @@ export interface ProductMediaPickerProps {
   value?: Record<string, MediaMeta>
   onChange?: (value: Record<string, MediaMeta>) => void
   disabled?: boolean
+  isError?: boolean
+  errorMessage?: string
 }
 
 const generatorId = newIdGenerator()
@@ -36,20 +38,23 @@ const settings: CarouselProps = {
 }
 
 export const ProductMediaPicker = (props: ProductMediaPickerProps) => {
-  const { value = {}, onChange, disabled } = props
+  const { value = {}, onChange, disabled, isError, errorMessage } = props
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   const images = value
   const setImages = onChange
 
   const sliderRef = useRef<Slider | null>(null)
+  const [uploadedImages, setUploadedImages] = useState<
+    Record<string, MediaMeta>
+  >({})
 
   const handleUploadImage = async (image: MediaMeta, file: File) => {
     const uploadedImg = await uploadImage(file)
     if (!uploadedImg) return
     await preloadImage(uploadedImg.secure_url)
-    setImages?.({
-      ...value,
+    setUploadedImages?.({
+      ...uploadedImages,
       [image.id]: {
         ...image,
         url: uploadedImg?.secure_url ?? '',
@@ -57,6 +62,15 @@ export const ProductMediaPicker = (props: ProductMediaPickerProps) => {
       },
     })
   }
+
+  useEffect(() => {
+    if (!Object.keys(uploadedImages).length) return
+    setImages?.({
+      ...value,
+      ...uploadedImages,
+    })
+    setUploadedImages({})
+  }, [uploadedImages, value, setImages])
 
   const onDrop = (acceptedFiles: File[]) => {
     const files = acceptedFiles.reduce(
@@ -227,6 +241,13 @@ export const ProductMediaPicker = (props: ProductMediaPickerProps) => {
           </div>
         ))}
       </div>
+      {isError && (
+        <div className="!mt-1">
+          <Typography level="p6" color="danger">
+            {errorMessage}
+          </Typography>
+        </div>
+      )}
     </div>
   )
 }
