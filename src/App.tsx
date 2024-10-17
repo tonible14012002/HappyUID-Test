@@ -11,6 +11,7 @@ import Toaster from './components/common/Toast'
 import routes from './pages'
 import { history, store } from './store'
 
+// TODO: reset scroll
 const App: React.FC = () => {
   const pageRoutes = routes.map(({ path, title, element, layout }) => {
     const Page = element
