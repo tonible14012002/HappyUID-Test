@@ -51,7 +51,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 const columns = [
   { name: 'IMAGE', uid: 'media', sortable: false },
   { name: 'NAME', uid: 'name', sortable: true },
-  { name: 'PRICE', uid: 'price', sortable: false },
+  { name: 'PRICE', uid: 'price', sortable: true },
   { name: 'CATEGORY', uid: 'categories', sortable: false },
   { name: 'ACTIONS', uid: 'actions' },
 ]
@@ -156,8 +156,8 @@ export const ProductListTable = (props: ProductTableProps) => {
 
   const sortedItems = useMemo(() => {
     return [...items].sort((a: Product, b: Product) => {
-      const first = a[sortDescriptor.column as keyof Product] as number
-      const second = b[sortDescriptor.column as keyof Product] as number
+      const first = Number(a[sortDescriptor.column as keyof Product]) as number
+      const second = Number(b[sortDescriptor.column as keyof Product]) as number
       const cmp = first < second ? -1 : first > second ? 1 : 0
 
       return sortDescriptor.direction === 'descending' ? -cmp : cmp
@@ -285,7 +285,7 @@ export const ProductListTable = (props: ProductTableProps) => {
               <Dropdown>
                 <DropdownTrigger>
                   <Button isIconOnly size="sm" variant="light">
-                    <RiMoreLine size={16} />
+                    <RiMoreLine size={20} />
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu

@@ -18,8 +18,13 @@ export const usePersistForm = <T,>(args: UsePersistFormArgs) => {
     return Storage.getValue<T>(key, fallBack)
   }, [])
 
+  const clearData = useCallback(() => {
+    Storage.clearItem(key)
+  }, [])
+
   return {
     persistDataLocalStore,
     loadInitData,
+    clearData,
   }
 }

@@ -29,7 +29,7 @@ export const ProductAdd = () => {
   const navigate = useNavigate()
 
   const { toast } = useToast()
-  const { persistDataLocalStore, loadInitData } =
+  const { persistDataLocalStore, loadInitData, clearData } =
     usePersistForm<ProductFormValues>({
       key: ADD_PRODUCT_KEY,
     })
@@ -46,7 +46,6 @@ export const ProductAdd = () => {
     resolver: zodResolver(schema),
     defaultValues: loadInitData(defaultValues),
   })
-  console.log(formInstance.formState.errors)
 
   const handleSave = formInstance.handleSubmit(async (values) => {
     console.log(values.categories)
@@ -62,6 +61,7 @@ export const ProductAdd = () => {
         sizes: values.sizes,
       })
       navigate(ROUTES.PRODUCT_LIST)
+      clearData()
       toast({
         variant: 'success',
         title: 'Product added',
