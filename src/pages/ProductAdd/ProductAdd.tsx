@@ -54,7 +54,6 @@ export const ProductAdd = () => {
 
   const handleSave = formInstance.handleSubmit(async (values) => {
     try {
-      console.log(values)
       const product = await createProduct({
         name: values.name,
         description: values.description,
@@ -100,7 +99,7 @@ export const ProductAdd = () => {
     <FormProvider {...formInstance}>
       <ProductAutoSaveDraft debounceSaveDraft={persistDataLocalStore} />
       <form
-        className="flex flex-col gap-8 mt-4 mb-[200px]"
+        className="flex flex-col gap-8 mt-4 mb-[100px]"
         onSubmit={handleSave}
       >
         <div className="flex justify-between md:items-center flex-col md:flex-row gap-8">

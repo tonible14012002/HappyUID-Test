@@ -42,7 +42,7 @@ export const HomePage = () => {
               color="primary"
               size="lg"
               as={Link}
-              to={ROUTES.ADD_PRODUCT}
+              to={ROUTES.PRODUCT_LIST}
             >
               Continue
               <AiOutlineArrowRight size={18} />

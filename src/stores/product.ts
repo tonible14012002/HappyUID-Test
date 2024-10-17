@@ -1,4 +1,4 @@
-import { createApi } from '@reduxjs/toolkit/query/react'
+import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { Storage } from '@/libs/storage'
 import type { Product } from '@/types/schema'
@@ -6,14 +6,13 @@ import { sleep } from '@/utils/sleep'
 // Define a service using a base URL and expected endpoints
 export const productApi = createApi({
   reducerPath: 'productApi',
-  baseQuery: async () => ({
-    data: null,
-  }),
+  baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    getProducts: builder.query<Product[], any>({
+    getProducts: builder.query<Product[], void>({
       queryFn: async () => {
         try {
           const products = Storage.getValue<Product[]>('products', [])
+          console.log({ products })
           return { data: products }
         } catch (error) {
           return {

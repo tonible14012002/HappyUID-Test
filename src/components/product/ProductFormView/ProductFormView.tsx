@@ -69,7 +69,7 @@ export const ProductFormView = ({
             label="Product Description"
             isRequired
           />
-          <div className="flex  gap-8">
+          <div className="lg:flex-col flex xl:flex-row gap-6 md:flex-row flex-col">
             <FormMultipleOptionPicker
               disabled={loading || disabled}
               title="Sizes"
@@ -87,6 +87,9 @@ export const ProductFormView = ({
               title="Gender"
               description="Pick available gender"
               name="gender"
+              classNames={{
+                radioGroup: 'xl:mt-2 lg:mt-0 md:mt-2 mt-0',
+              }}
               options={[
                 {
                   label: 'Male',

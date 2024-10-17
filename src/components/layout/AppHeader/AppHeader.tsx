@@ -19,12 +19,12 @@ const HEAD_ROUTES = [
     to: ROUTES.HOME,
   },
   {
-    title: 'Add Products',
-    to: ROUTES.ADD_PRODUCT,
-  },
-  {
     title: 'Products',
     to: ROUTES.PRODUCT_LIST,
+  },
+  {
+    title: 'Add Products',
+    to: ROUTES.ADD_PRODUCT,
   },
 ]
 

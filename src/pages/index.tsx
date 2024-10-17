@@ -1,8 +1,8 @@
 import { AppLayout, Layout } from '@/components/layout/Layout'
-import { ProductList } from '@/components/product/ProductList'
 
 import { HomePage } from './Home'
 import { ProductAdd } from './ProductAdd'
+import { ProductListPage } from './ProductList'
 import { ROUTES } from './routes'
 
 const routes = [
@@ -21,7 +21,7 @@ const routes = [
   {
     path: ROUTES.PRODUCT_LIST,
     title: 'Products',
-    element: ProductList,
+    element: ProductListPage,
     layout: AppLayout,
   },
 ]
