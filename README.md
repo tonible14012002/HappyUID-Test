@@ -21,11 +21,12 @@ All npm package are keeping least release version powered by [Dependabot](https:
 
 ## Quick start
 
-**Clone Repo**
-
+**Clone Repo**, (remember to add .env file)
 ```
 git clone git@github.com:tonible14012002/HappyUID-Test.git
 cd HappyUID-Test
+pnpm install
+pnpm dev
 ```
 
 ## Development
