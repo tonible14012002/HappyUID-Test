@@ -8,6 +8,7 @@ import {
 } from '@nextui-org/react'
 import { RiCheckLine } from 'react-icons/ri'
 
+import Typography from '@/components/common/Typography'
 import { useToast } from '@/hooks/useToast'
 import { useRemoveProductMutation } from '@/stores/product'
 import type { Product } from '@/types/schema'
@@ -47,17 +48,19 @@ export const DeleteProductModal = (props: DeleteProductModalProps) => {
           Delete product{toDeleteProducts.length > 1 ? 's' : ''}
         </ModalHeader>
         <ModalBody>
-          {toDeleteProducts.length === 1 ? (
-            <>
-              Are you sure you want to delete the product{' '}
-              <b>{toDeleteProducts[0].name}</b>? This action cannot be undone.
-            </>
-          ) : (
-            <>
-              Are you sure you want to delete {toDeleteProducts.length}{' '}
-              products? This action cannot be undone.
-            </>
-          )}
+          <Typography className="!text-inherit">
+            {toDeleteProducts.length === 1 ? (
+              <>
+                Are you sure you want to delete the product{' '}
+                <b>{toDeleteProducts[0].name}</b>? This action cannot be undone.
+              </>
+            ) : (
+              <>
+                Are you sure you want to delete {toDeleteProducts.length}{' '}
+                products? This action cannot be undone.
+              </>
+            )}
+          </Typography>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={onClose} isDisabled={isLoading}>
